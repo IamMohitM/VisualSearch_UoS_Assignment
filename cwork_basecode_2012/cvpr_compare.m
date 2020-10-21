@@ -5,6 +5,7 @@ function dst=cvpr_compare(F1, F2)
 
 % For now it just returns a random number
 
-dst=rand();
+dst = sqrt(sum((F1 - F2).^2));
+% dst=rand();
 
 return;
