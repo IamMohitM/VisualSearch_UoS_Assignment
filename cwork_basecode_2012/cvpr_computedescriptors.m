@@ -15,10 +15,10 @@ close all;
 clear all;
 
 %% Edit the following line to the folder you unzipped the MSRCv2 dataset to
-DATASET_FOLDER = 'c:/visiondemo/cwsolution/MSRC_ObjCategImageDatabase_v2';
+DATASET_FOLDER = '../MSRC_ObjCategImageDatabase_v2';
 
 %% Create a folder to hold the results...
-OUT_FOLDER = 'c:/visiondemo/cwsolution/descriptors';
+OUT_FOLDER = '..n/descriptors';
 %% and within that folder, create another folder to hold these descriptors
 %% the idea is all your descriptors are in individual folders - within
 %% the folder specified as 'OUT_FOLDER'.

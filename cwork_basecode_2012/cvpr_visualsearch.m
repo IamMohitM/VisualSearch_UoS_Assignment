@@ -21,10 +21,10 @@ close all;
 clear all;
 
 %% Edit the following line to the folder you unzipped the MSRCv2 dataset to
-DATASET_FOLDER = 'c:/visiondemo/cwsolution/MSRC_ObjCategImageDatabase_v2';
+DATASET_FOLDER = '../MSRC_ObjCategImageDatabase_v2';
 
 %% Folder that holds the results...
-DESCRIPTOR_FOLDER = 'c:/visiondemo/cwsolution/descriptors';
+DESCRIPTOR_FOLDER = '../descriptors';
 %% and within that folder, another folder to hold the descriptors
 %% we are interested in working with
 DESCRIPTOR_SUBFOLDER='globalRGBhisto';
