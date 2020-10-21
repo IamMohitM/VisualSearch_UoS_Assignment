@@ -29,7 +29,7 @@ DESCRIPTOR_FOLDER = '../descriptors';
 %% we are interested in working with
 DESCRIPTOR_SUBFOLDER='globalRGBhisto';
 
-
+addpath('..')
 %% 1) Load all the descriptors into "ALLFEAT"
 %% each row of ALLFEAT is a descriptor (is an image)
 
@@ -52,7 +52,8 @@ end
 %% 2) Pick an image at random to be the query
 NIMG=size(ALLFEAT,1);           % number of images in collection
 queryimg=floor(rand()*NIMG);    % index of a random image
-
+query_file_path = ALLFILES{queryimg};
+[~, query_file, ~] = fileparts(query_file_path);
 
 %% 3) Compute the distance of image to the query
 dst=[];
@@ -71,11 +72,22 @@ dst=sortrows(dst,1);  % sort the results
 SHOW=15; % Show top 15 results
 dst=dst(1:SHOW,:);
 outdisplay=[];
+prediction_files = {};
+
 for i=1:size(dst,1)
    img=imread(ALLFILES{dst(i,2)});
+   [~, name, ~] = fileparts(ALLFILES{dst(i, 2)});
+   prediction_files = [prediction_files ; name];
    img=img(1:2:end,1:2:end,:); % make image a quarter size
    img=img(1:81,:,:); % crop image to uniform size vertically (some MSVC images are different heights)
    outdisplay=[outdisplay img];
 end
-imgshow(outdisplay);
+
+[precision, recall, average_precision] = evaluate_results(query_file, prediction_files);
+average_precision
+figure;
+imshow(outdisplay);
 axis off;
+figure;
+plot(recall, precision);
+axis on;
