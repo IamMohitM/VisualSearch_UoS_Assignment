@@ -1,6 +1,6 @@
-DATASET_FOLDER = '../MSRC_ObjCategImageDatabase_v2';
+DATASET_FOLDER = 'MSRC_ObjCategImageDatabase_v2';
 allfiles=dir(fullfile([DATASET_FOLDER,'/Images/*.bmp']));
-
+allfiles
 class_freq = zeros(1, 20);
 
 fout=['class_frequency.mat'];
