@@ -1,2 +1,5 @@
-descriptors/*
-.DS_Store
+*.DS_Store
+*.asv
+*.mat
+
+descriptors/
