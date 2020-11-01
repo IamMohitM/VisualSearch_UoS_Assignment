@@ -15,12 +15,14 @@ totalColumnGrids = fix(width/gridSize);
 totalRowGrids = fix(height/gridSize);
 
 bin_edges = linspace(-180, 180, edge_bins+1);
-gridTextureDescriptor = [];
+featuresPerGrid = edge_bins + 3;
+gridTextureDescriptor = zeros(1, totalColumnGrids*totalRowGrids * featuresPerGrid);
+lastIndex = 0;
 
 for rowIndex=0:(totalRowGrids-1)
     for columnIndex=0:(totalColumnGrids-1)
         gridImage = resizedImage((rowIndex*gridSize)+1: (rowIndex*gridSize)+gridSize, (columnIndex*gridSize)+1: (columnIndex*gridSize)+gridSize, :);
-        gridEdgeImage = edgeImage((rowIndex*gridSize)+1: (rowIndex*gridSize)+gridSize, (columnIndex*gridSize)+1: (columnIndex*gridSize)+gridSize, :);
+        gridEdgeImage = edgeImage((rowIndex*gridSize)+1: (rowIndex*gridSize)+gridSize, (columnIndex*gridSize)+1: (columnIndex*gridSize)+gridSize, :);     
         redGrid = gridImage(:, :, 1);
         greenGrid = gridImage(:, :, 2);
         blueGrid = gridImage(:, :, 3);
@@ -31,11 +33,10 @@ for rowIndex=0:(totalRowGrids-1)
         meanGreen = mean(greenGrid(:));
         meanBlue = mean(blueGrid(:));
         
-        
         grid_features = [orientation_freqs meanRed meanGreen meanBlue];
+        gridTextureDescriptor(lastIndex+1: lastIndex+featuresPerGrid) = grid_features;
         
-        gridTextureDescriptor = [gridTextureDescriptor grid_features];
-        
+        lastIndex = lastIndex + featuresPerGrid;
         
     end
 end
