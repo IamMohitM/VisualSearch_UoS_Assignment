@@ -16,7 +16,7 @@
 %% (c) John Collomosse 2010  (J.Collomosse@surrey.ac.uk)
 %% Centre for Vision Speech and Signal Processing (CVSSP)
 %% University of Surrey, United Kingdom
-function [precision, recall, average_precision] = cvpr_visualsearch(DESCRIPTOR_SUBFOLDER, nResults, queryClass, displayResults)
+function [precision, recall, average_precision] = cvpr_visualsearch(DESCRIPTOR_SUBFOLDER, distanceMetric, nResults, queryClass, displayResults)
 
 close all;
 
@@ -28,11 +28,16 @@ if nargin<1
     DESCRIPTOR_SUBFOLDER='gridTextureDescriptors_20_20';
     nResults = 15;
     displayResults=true;
+    distanceMetric = "Euclidean";
 elseif nargin < 2
+    distanceMetric = "Euclidean";
     nResults = 15;
     displayResults=true;
-elseif nargin < 4
+elseif nargin < 3
+    nResults=15;
     displayResults=true;
+elseif nargin < 5
+     displayResults = true;
 end
 %% and within that folder, another folder to hold the descriptors
 %% we are interested in working with
@@ -49,49 +54,60 @@ for filenum=1:length(allfiles)
     fname=allfiles(filenum).name;
     imgfname_full=([DATASET_FOLDER,'/Images/',fname]);
     img=double(imread(imgfname_full))./255;
-    featfile=[DESCRIPTOR_FOLDER,'/',DESCRIPTOR_SUBFOLDER,'/',fname(1:end-4),'.mat'];%replace .bmp with .mat
+    featfile=DESCRIPTOR_FOLDER+"/"+DESCRIPTOR_SUBFOLDER+"/"+fname(1:end-4)+".mat";%replace .bmp with .mat
     load(featfile,'F');
     ALLFILES{ctr}=imgfname_full;
     ALLFEAT=[ALLFEAT ; F];
     ctr=ctr+1;
 end
 
-%% 2) Pick an image at random to be the query
+%% 2) Pick an image at random to be the query or choose an image from queryClass if passed
 NIMG=size(ALLFEAT,1); % number of images in collection
-if nargin<3
+if nargin<4
     queryimg=floor(rand()*NIMG);    % index of a random image
 else
     queryClassFiles = {};
     index = {};
     classFilesIndex = 0;
     for i=1:length(allfiles)
-        if(startsWith(allfiles(i).name,strcat(queryClass,'_')))
+        if(startsWith(allfiles(i).name,strcat(num2str(queryClass),'_')))
             classFilesIndex = classFilesIndex + 1;
             queryClassFiles{classFilesIndex} = allfiles(i).name;
             index{classFilesIndex} = i;
         end
     end
-    queryimg = index{floor(rand()*classFilesIndex)};
+    t=ceil(rand()*classFilesIndex);
+    queryimg = index{t};
 end
 query_file_path = ALLFILES{queryimg};
 [~, query_file, ~] = fileparts(query_file_path);
 
 %% 3) Compute the distance of image to the query
 dst=[];
+
+if strcmp(distanceMetric, 'Mahalanobis')
+    load(DESCRIPTOR_FOLDER +"/" +DESCRIPTOR_SUBFOLDER+"/projection_matrix.mat", 'projectionMatrix');
+else
+    projectionMatrix = [];
+end
+
+query=ALLFEAT(queryimg,:);
+
 for i=1:NIMG
     candidate=ALLFEAT(i,:);
-    query=ALLFEAT(queryimg,:);
-    thedst=cvpr_compare(query,candidate);
-    dst=[dst ; [thedst i]];
+    distance=cvpr_compare(query,candidate, distanceMetric, projectionMatrix);
+    dst=[dst ; [distance i]]
+%     dst
 end
+
 dst=sortrows(dst,1);  % sort the results
 
 %% 4) Visualise the results
 %% These may be a little hard to see using imgshow
 %% If you have access, try using imshow(outdisplay) or imagesc(outdisplay)
 
-SHOW=nResults; % Show top 15 results
-dst=dst(1:SHOW,:);
+
+dst=dst(1:nResults,:);
 outdisplay=[];
 prediction_files = {};
 
