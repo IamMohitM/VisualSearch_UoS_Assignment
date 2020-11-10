@@ -8,7 +8,7 @@ recall = zeros(1, length(predictions));
 relevant_predictions = zeros(1, length(predictions));
 
 class_freqs = load('class_frequency.mat');
-n = str2num(true_label{1});
+n = str2num(true_label{1}); %#ok<ST2NM>
 true_positives = class_freqs.class_freq(n);
 correct_predictions = 0;
 
@@ -20,7 +20,6 @@ for i=1:length(predictions)
     precision(i) = double(correct_predictions)/i;
     recall(i) = double(correct_predictions)/true_positives;
 end
-
-average_precision = sum(precision .* relevant_predictions)/sum(relevant_predictions);
+average_precision = sum(precision .* relevant_predictions)/true_positives;
 
 return;
