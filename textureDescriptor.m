@@ -8,6 +8,7 @@ if (rem(hcf, gridSize))
     error("The grid size should be a factor of hcf of the resized image( 200 height, 300 width) %d - so values like 2, 5, 10, 20..", hcf);
 end
 resizedImage = imresize(image, [200, 300])./255;
+resizedImage = imgaussfilt(resizedImage);
 grayImage = rgb2gray(resizedImage);
 edgeImage = edge(grayImage, 'canny');
 
