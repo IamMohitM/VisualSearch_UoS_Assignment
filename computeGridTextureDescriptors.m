@@ -33,7 +33,7 @@ for filenum=1:length(allfiles)
     imgfname_full=([DATASET_FOLDER,'/Images/',fname]);
     img=double(imread(imgfname_full));
     fout=[OUT_FOLDER,'/',OUT_SUBFOLDER,'/',fname(1:end-4),'.mat'];%replace .bmp with .mat
-    F=computeTextureDescriptor(img, gridSize, edgeBins);
+    F=textureDescriptor(img, gridSize, edgeBins);
     save(fout,'F');
     toc
 end

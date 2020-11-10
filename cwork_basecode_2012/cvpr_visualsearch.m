@@ -96,7 +96,7 @@ query=ALLFEAT(queryimg,:);
 for i=1:NIMG
     candidate=ALLFEAT(i,:);
     distance=cvpr_compare(query,candidate, distanceMetric, projectionMatrix);
-    dst=[dst ; [distance i]]
+    dst=[dst ; [distance i]];
 %     dst
 end
 
