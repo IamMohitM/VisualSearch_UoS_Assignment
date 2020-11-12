@@ -24,7 +24,7 @@ function E=Eigen_Deflate(E,method,param)
     switch method
         
         case 'keepn'
-            E.val=E.val(:);
+            E.val=E.val(1:param);
             E.vct=E.vct(:,1:param);
         case 'keepf'
             totalenergy=sum(abs(E.val));
