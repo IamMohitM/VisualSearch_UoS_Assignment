@@ -1,4 +1,6 @@
 function colorHistogram = globalColorHistogram(img, quantize)
+%%computes the global Color Histogram of img. quantize specifies the
+%%quantization of the color ranges
 
     red_dash = floor((img(:, :, 1) .* quantize)./256);
     green_dash = floor((img(:, :, 2) .* quantize)./256);

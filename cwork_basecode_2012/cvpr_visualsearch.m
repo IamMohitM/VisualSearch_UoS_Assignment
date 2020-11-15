@@ -1,22 +1,17 @@
-%% EEE3032 - Computer Vision and Pattern Recognition (ee3.cvpr)
-%%
-%% cvpr_visualsearch.m
-%% Skeleton code provided as part of the coursework assessment
-%%
-%% This code will load in all descriptors pre-computed (by the
-%% function cvpr_computedescriptors) from the images in the MSRCv2 dataset.
-%%
-%% It will pick a descriptor at random and compare all other descriptors to
-%% it - by calling cvpr_compare.  In doing so it will rank the images by
-%% similarity to the randomly picked descriptor.  Note that initially the
-%% function cvpr_compare returns a random number - you need to code it
-%% so that it returns the Euclidean distance or some other distance metric
-%% between the two descriptors it is passed.
-%%
-%% (c) John Collomosse 2010  (J.Collomosse@surrey.ac.uk)
-%% Centre for Vision Speech and Signal Processing (CVSSP)
-%% University of Surrey, United Kingdom
 function [precision, recall, average_precision] = cvpr_visualsearch(DESCRIPTOR_SUBFOLDER, distanceMetric, nResults, queryClass, displayResults)
+
+%% This function will perform the visual search for a random image or an image from
+%% a particular class if queryClass is mentioned and return precision, recall and
+%% and average_precision metrics
+%% this function loads descriptors pre-computed in the DESCRIPTOR_SUBFOLDER
+%% from the images in the MSRCv2 dataset.
+%% DESCRIPTOR_SUBFOLDER must be inside "descriptors" directory at the top-level project directory
+%% Choose one of the followinh distanc metrics: "cosine", "Euclidean", "Manhattan",
+%% "Mahalanobis" (default Euclidean)
+%% Choose "Mahalanobis" only if the DESCRIPTOR_SUBFOLDER has a projectionMatrix.mat file
+%% twhich contains Eigen Vectors(.vct) and Eigen Values(.val)
+%% nResults returns the top n results for the query (default 15)
+%% set displayResults as false to not show any results
 
 close all;
 
@@ -66,25 +61,18 @@ NIMG=size(ALLFEAT,1); % number of images in collection
 if nargin<4
     queryimg=floor(rand()*NIMG);    % index of a random image
 else
-    queryClassFiles = {};
-    index = {};
-    classFilesIndex = 0;
-    for i=1:length(allfiles)
-        if(startsWith(allfiles(i).name,strcat(num2str(queryClass),'_')))
-            classFilesIndex = classFilesIndex + 1;
-            queryClassFiles{classFilesIndex} = allfiles(i).name;
-            index{classFilesIndex} = i;
-        end
-    end
-    t=ceil(rand()*classFilesIndex);
-    queryimg = index{t};
+    load('classFileIndices.mat', 'classFileIndices');
+    queryClassIndices = classFileIndices(num2str(queryClass));
+    t=ceil(rand()*length(queryClassIndices));
+    queryimg = queryClassIndices(t);
 end
 query_file_path = ALLFILES{queryimg};
+% query_file_path = 'MSRC_ObjCategImageDatabase_v2/Images/19_22_s.bmp';
 [~, query_file, ~] = fileparts(query_file_path);
+query_file_path
 
 %% 3) Compute the distance of image to the query
 dst=[];
-
 if strcmp(distanceMetric, 'Mahalanobis')
     load(DESCRIPTOR_FOLDER +"/" +DESCRIPTOR_SUBFOLDER+"/projection_matrix.mat", 'projectionMatrix');
 else
@@ -92,20 +80,25 @@ else
 end
 
 query=ALLFEAT(queryimg,:);
+% load("descriptors/"+DESCRIPTOR_SUBFOLDER+"/19_22_s.mat", 'F');
+% query = F;
 
 for i=1:NIMG
     candidate=ALLFEAT(i,:);
     distance=cvpr_compare(query,candidate, distanceMetric, projectionMatrix);
     dst=[dst ; [distance i]];
-%     dst
 end
 
-dst=sortrows(dst,1);  % sort the results
+%because higher values in cosine similarity means high similarity
+if strcmp(distanceMetric, "cosine")
+    dst = sortrows(dst, 1, "descend");
+else
+    dst=sortrows(dst,1);
+end
 
 %% 4) Visualise the results
 %% These may be a little hard to see using imgshow
 %% If you have access, try using imshow(outdisplay) or imagesc(outdisplay)
-
 
 dst=dst(1:nResults,:);
 outdisplay=[];
@@ -117,20 +110,23 @@ for i=1:size(dst,1)
    prediction_files = [prediction_files ; name];
    
    if (displayResults)
-       img=img(1:2:end,1:2:end,:); % make image a quarter size
-       img=img(1:81,:,:); % crop image to uniform size vertically (some MSVC images are different heights)
-       outdisplay=[outdisplay img];
+%        img=img(1:2:end,1:2:end,:); % make image a quarter size
+       img = imresize(img, [200, 300]);
+       outdisplay=[outdisplay img zeros(size(img, 1), 10, 3)];
    end
    
 end
-
+prediction_files
 [precision, recall, average_precision] = evaluate_results(query_file, prediction_files);
+precision
+recall
 if (displayResults)
     figure;
     imshow(outdisplay);
     axis off;
     figure;
     plot(recall, precision);
+    title("Precision-Recall Curve");
     xlabel("Recall");
     ylabel("Precision");
     axis on;

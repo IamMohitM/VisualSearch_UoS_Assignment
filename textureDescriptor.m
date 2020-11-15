@@ -1,4 +1,9 @@
 function gridTextureDescriptor = textureDescriptor(image, gridSize, edge_bins)
+%% computes texture Descriptor of the given image. 
+%% The image is resized to width 300 and height 200
+%% Gridsize defines size of grid and must be divisible by both 300 and 200 (because square grid)
+%% edge_bins defines the quantization value of edge orientations
+
 
 width = 300;
 height = 200;

@@ -1,4 +1,10 @@
-function computePCA(DESCRIPTOR_SUBFOLDER_PATH, PCA_OUT_FOLDER_PATH, pca_parameter, variance_contribution) 
+function computePCA(DESCRIPTOR_SUBFOLDER, PCA_OUT_FOLDER_PATH, pca_parameter, variance_contribution) 
+%% computes Principal Components of the descriptors in the DESCRIPTOR_SUBFOLDER using Eigen
+%% Modelling. Saves the PCA components in PCA_OUT_FOLDER_PATH. The saved features are
+%% the EigenVectors * features. 
+%% pca_parameter specifies the number of components if variance_contribution=false(default)
+%% if variance_contribution=true, then pca_parameter should be mentioned in decimals which
+%% specifies how much variance energy the resulting components must contain
 
     if nargin<4
         variance_contribution = false;
@@ -12,7 +18,7 @@ function computePCA(DESCRIPTOR_SUBFOLDER_PATH, PCA_OUT_FOLDER_PATH, pca_paramete
     ctr = 1;
     for filenum=1:length(allfiles)
         fname=allfiles(filenum).name;
-        featfile=[DESCRIPTOR_FOLDER+"/"+DESCRIPTOR_SUBFOLDER_PATH+"/"+fname(1:end-4)+".mat"];
+        featfile=[DESCRIPTOR_FOLDER+"/"+DESCRIPTOR_SUBFOLDER+"/"+fname(1:end-4)+".mat"];
         load(featfile, 'F');
         ALLFEAT=[ALLFEAT ; F];
         ctr=ctr+1;
