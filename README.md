@@ -31,7 +31,9 @@ SIFT Descriptors-Bag of Visual Words, Transfer Learning and SVM Classification w
 1. Create a folder (colorHisto_4) inside descriptors folder
 2.  Run the following command
 
-```computeGlobalColorHistDescriptors("RGBHISTO_4", 4);```
+```
+computeGlobalColorHistDescriptors("RGBHISTO_4", 4);
+```
 
 The above command will create .mat descriptors inside colorHisto_4 folder with quantization 4
 
@@ -40,7 +42,9 @@ The above command will create .mat descriptors inside colorHisto_4 folder with q
 1. Create TD_25_30 folder in descriptors folder
 2. Run the following command
 
-```computeGridTextureDescriptors("TD_25_30", 25, 20);```
+```
+computeGridTextureDescriptors("TD_25_30", 25, 20);
+```
 
 This computes texture descriptors with grid size 25 and 20 edge orientation ranges
 
@@ -49,26 +53,36 @@ This computes texture descriptors with grid size 25 and 20 edge orientation rang
 1. Create PCA_TD_25_30 folder in descriptors folder
 2. Run the following command
 
-```computePCA("TD_25_30", "PCA_TD_25_30", 20);```
+```
+computePCA("TD_25_30", "PCA_TD_25_30", 20);
+```
 
 This will compute the top 20 principal components of your features dimensions and save the descriptors in PCA_TD_25_30 folder. It will also save the projection matrix in PCA_TD_25_30 folder.
 
 To compute components that contribute 97% of the variance
 
-```computePCA("TD_25_30", "PCA_TD_25_30", 0.97, true);```
+```
+computePCA("TD_25_30", "PCA_TD_25_30", 0.97, true);
+```
 
 ### Perform VisualSearch
 
-```[p, r, ap] = cvpr_visualsearch("colorHisto_4", "cosine" );```
+```
+[p, r, ap] = cvpr_visualsearch("colorHisto_4", "cosine" );
+```
 
 To perform visual search on class 4 and return top 20 Results
 
-```[p, r, ap] = cvpr_visualsearch("colorHisto_4", "Euclidean", 20, 4);```
+```
+[p, r, ap] = cvpr_visualsearch("colorHisto_4", "Euclidean", 20, 4);
+```
 
 
 Perform Visual Search with Mahalanobis (Only for PCA descriptors which have `projectionMatrix.mat` in their DESCRIPTOR_SUBFOLDER)
 
-```[p, r, ap] = cvpr_visualsearch("PCA_TD_25_30", "Mahalanobis", 20, 4);```
+```
+[p, r, ap] = cvpr_visualsearch("PCA_TD_25_30", "Mahalanobis", 20, 4);
+```
 
 ### SIFT and BOVW
 
@@ -76,7 +90,9 @@ To compute the SIFT Descriptors followed by computing Bag of Visual Words (BOVW)
 
 Syntax:
 
-```python compute_sift_bovw_Descriptors.py "path to dataset"(optional) output_path(mandatory) k-clusters(mandatory)```
+```
+python compute_sift_bovw_Descriptors.py "path to dataset"(optional) output_path(mandatory) k-clusters(mandatory)
+```
 
 default dataset_path is the top-level project folder or where README.md file is. (../MSRC_ObjCategImageDatabase_v2/Images/)
 
@@ -84,13 +100,17 @@ Example:
 
 Create a SIFT_BOVW folder inside descriptors folder
 
-```python compute_sift_bovw_Descriptors.py "..descriptors/SIFT_BOVW" 100```
+```
+python compute_sift_bovw_Descriptors.py "..descriptors/SIFT_BOVW" 100
+```
 
 Will compute BOVW with 100 n_clusters and save the features in SIFT_BOVW folder
 
 If your dataset is in a different path, for example in home directory, use:
 
-```python compute_sift_bovw_Descriptors.py --dataset_path "~/MSRC_ObjCategImageDatabase_v2/Images/" "..descriptors/SIFT_BOVW" 100" 100```
+```
+python compute_sift_bovw_Descriptors.py --dataset_path "~/MSRC_ObjCategImageDatabase_v2/Images/" "..descriptors/SIFT_BOVW" 100" 100
+```
 
 
 ### Transfer Learning
@@ -99,7 +119,9 @@ To compute the transfer learning descriptors with vgg19, resnet50or  resnet152 u
 
 Syntax:
 
-```python compute_transfer_learning_descriptors.py --dataset_path "path to dataset"(optional) output_path(mandatory) model_name(mandatory)```
+```
+python compute_transfer_learning_descriptors.py --dataset_path "path to dataset"(optional) output_path(mandatory) model_name(mandatory)
+```
 
 model_name values: ["vgg19", "resnet50", "resnet152"]
 default dataset_path is the top-level project folder or where README.md file is. (../MSRC_ObjCategImageDatabase_v2/Images/)
@@ -109,13 +131,17 @@ Computing vgg19 descriptors
 
 Create a VGG19 folder inside descriptors folder
 
-```python compute_transfer_learning_descriptors.py "..descriptors/VGG19" "vgg19"```
+```
+python compute_transfer_learning_descriptors.py "..descriptors/VGG19" "vgg19"
+```
 
 Will compute features using pre-trained VGG19 model and save the features in VGG19 folder
 
 If your dataset is in a different path, for example in home directory, use:
 
-```python compute_transfer_learning_descriptors.py --dataset_path "~/MSRC_ObjCategImageDatabase_v2/Images/" "..descriptors/ResNet_50" "resnet50"```
+```
+python compute_transfer_learning_descriptors.py --dataset_path "~/MSRC_ObjCategImageDatabase_v2/Images/" "..descriptors/ResNet_50" "resnet50"
+```
 
 ### Testing your Descriptors
 
@@ -125,23 +151,31 @@ points = [3, 5, 10, 15, 20]
 
 Use:
 
-```calculate_test_results(DESCRIPTOR_SUBFOLDER, [3, 5])```
+```
+calculate_test_results(DESCRIPTOR_SUBFOLDER, [3, 5])
+```
 
 This will calculate Average precision per class and Mean Average precision for top 3 and top 5 results with cosine, Euclidean and Manhattan Distance. The Average Precision per class is calculated by querying randomly for that class and averaging the 10 average precisions. This will create a Results.xlsx in the Results and 3 sheets one for each distance type
 
-```calculate_test_results(descriptors/TF_25_30);```
+```
+calculate_test_results(descriptors/TF_25_30);
+```
 
 
 
 To calculate with Mahalanobis Distance (make sure there is a projectionMatrix.mat file in your DESCRIPTOR_SUBFOLDER)
 
-```calculate_test_results("DESCRIPTOR_SUBFOLDER", [3, 5] ,true)```
+```
+calculate_test_results("DESCRIPTOR_SUBFOLDER", [3, 5] ,true)
+```
 
 ### SVM Classification
 
 #### Syntax
 
-```python svm_training.py "path to features"(mandatory) --kernel (optional) --gamma (optional) --test_size (optional)```
+```
+python svm_training.py "path to features"(mandatory) --kernel (optional) --gamma (optional) --test_size (optional)
+```
 
 This will also print the Accuracy, Classification report with precision and recall per class and mean average precision and plot a confusion matrix
 
@@ -156,11 +190,15 @@ More information about kernels and gamma at https://scikit-learn.org/stable/modu
 Example:
 Training with vgg19 descriptors
 
-```python svm_training.py "../descriptors/vgg19/" --kernel "sigmoid" --gamma 0.000001```
+```
+python svm_training.py "../descriptors/vgg19/" --kernel "sigmoid" --gamma 0.000001
+```
 
 Training with a different test size
 
-```python svm_training.py "../descriptors/vgg19/" --test_size 0.2```
+```
+python svm_training.py "../descriptors/vgg19/" --test_size 0.2
+```
 
 
 #### Best parameters for VGG19
