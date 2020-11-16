@@ -1,6 +1,6 @@
 function calculate_test_results(DESCRIPTOR_SUBFOLDER, points, isMahalanobis)
-%% Calculates the average precision and mean average precision for all
-%% classes for the descriptors in the DESCRIPTOR_SUBFOLDER for metrics [Euclidean, cosine, Manhattan](default)
+%% Calculates the average precision for all classes and mean average precision of
+%% the descriptors in the DESCRIPTOR_SUBFOLDER for metrics [Euclidean, cosine, Manhattan](default)
 %% The results are saved in the Results/Results.xlsx in sheet DESCRIPTOR_SUBFOLDER 
 %% Average Precision per class is calculated over 10 iterations for each class
 %% 'points' must be a list of top n results to calculate the metrics. default ([3, 5, 10, 15, 20])
