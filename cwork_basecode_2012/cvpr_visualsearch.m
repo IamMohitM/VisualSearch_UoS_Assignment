@@ -48,7 +48,6 @@ allfiles=dir(fullfile([DATASET_FOLDER,'/Images/*.bmp']));
 for filenum=1:length(allfiles)
     fname=allfiles(filenum).name;
     imgfname_full=([DATASET_FOLDER,'/Images/',fname]);
-    img=double(imread(imgfname_full))./255;
     featfile=DESCRIPTOR_FOLDER+"/"+DESCRIPTOR_SUBFOLDER+"/"+fname(1:end-4)+".mat";%replace .bmp with .mat
     load(featfile,'F');
     ALLFILES{ctr}=imgfname_full;

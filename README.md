@@ -9,6 +9,7 @@
  basecode provided and improvised<br>
 - descriptors(Directory needs to be created by user)
 - Results(Directory needs to be created by user)
+- PR_Plots(Directory needs to be created by user)
 
 ### Setting up your project
 
@@ -167,6 +168,27 @@ To calculate with Mahalanobis Distance (make sure there is a projectionMatrix.ma
 
 ```
 calculate_test_results("DESCRIPTOR_SUBFOLDER", [3, 5] ,true)
+```
+### Compute PR Graphs
+
+#### Syntax
+
+```
+computePRGraph(DESCRIPTOR_SUBFOLDER, distanceMetrics)
+```
+
+This will compute PR graphs for distanceMetrics and save it in PR_Plots Directory, one image for each distance metric. Use "Mahalanobis" only for PCA descriptors (projectionMatrix in the DESCRIPTOR_SUBFOLDER);
+
+Example
+
+```
+computePRGraph("RGBHISTO_4"); %Will compute Euclidean, cosine and Manhattan by default
+```
+
+To compute Mahalanobis and cosine with PCA descriptors
+
+```
+computePRGraph("PCA_TD_25_30", ["Mahalanobis", "cosine"]);
 ```
 
 ### SVM Classification
