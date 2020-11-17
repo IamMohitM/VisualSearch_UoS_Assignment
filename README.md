@@ -85,6 +85,32 @@ Perform Visual Search with Mahalanobis (Only for PCA descriptors which have `pro
 [p, r, ap] = cvpr_visualsearch("PCA_TD_25_30", "Mahalanobis", 20, 4);
 ```
 
+#### Perform visual search with any Image
+Use visualsearch.m for Global Color Histogram and Texture Descriptors
+
+```
+visualsearch(image, descriptorType, parameters, DESCRIPTOR_SUBFOLDER,distanceMetric, nResults)
+```
+
+`parameters` must be a 1D array and descriptors with this descriptorType must be computed and saved in `DESCRIPTOR_SUBFOLDER`
+
+Example:
+```
+img = double(imread("Images/15_11_s.bmp")); %do not normalise your image
+visualsearch(img, "textureDescriptor", [25, 20], "TD_25_20", "Euclidean", 10);
+```
+
+The above will perform a visual search with parameters 25 for grid size and 30 for edge orientations
+
+```
+img = double(imread("Images/15_11_s.bmp")); %do not normalise your image
+visualsearch(img, "ColorHistDescriptor", [4], "RGBHisto_4", "cosine", 10);
+```
+
+The above will perform a visual search with parameters 4 for quantization with Global Color Histogram Descriptors
+
+
+
 ### SIFT and BOVW
 
 To compute the SIFT Descriptors followed by computing Bag of Visual Words (BOVW) use `compute_sift_bovw_Descriptors` in the Python Folder
