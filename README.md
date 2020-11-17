@@ -38,7 +38,7 @@ computeGlobalColorHistDescriptors("RGBHISTO_4", 4);
 
 The above command will create .mat descriptors inside colorHisto_4 folder with quantization 4
 
-### ComputeGridTextureDescriptors
+### ComputeGridTextureDescriptors for Entire Dataset
 
 1. Create TD_25_30 folder in descriptors folder
 2. Run the following command
@@ -49,7 +49,7 @@ computeGridTextureDescriptors("TD_25_30", 25, 20);
 
 This computes texture descriptors with grid size 25 and 20 edge orientation ranges
 
-### Compute Principal Components
+### Compute Principal Components for Entire Dataset
 
 1. Create PCA_TD_25_30 folder in descriptors folder
 2. Run the following command
@@ -68,6 +68,8 @@ computePCA("TD_25_30", "PCA_TD_25_30", 0.97, true);
 
 ### Perform VisualSearch
 
+For all pre-computed descriptors from the dataset.
+
 ```
 [p, r, ap] = cvpr_visualsearch("colorHisto_4", "cosine" );
 ```
@@ -78,6 +80,13 @@ To perform visual search on class 4 and return top 20 Results
 [p, r, ap] = cvpr_visualsearch("colorHisto_4", "Euclidean", 20, 4);
 ```
 
+or
+
+Using VGG19 descriptors (see Transfer Learning to see how to compute transfer learning descriptors)
+
+```
+[p, r, ap] = cvpr_visualsearch("VGG19", "cosine", 20, 4);
+```
 
 Perform Visual Search with Mahalanobis (Only for PCA descriptors which have `projectionMatrix.mat` in their DESCRIPTOR_SUBFOLDER)
 
@@ -86,13 +95,18 @@ Perform Visual Search with Mahalanobis (Only for PCA descriptors which have `pro
 ```
 
 #### Perform visual search with any Image
-Use visualsearch.m for Global Color Histogram and Texture Descriptors
+Use visualsearch.m only for Global Color Histogram and Texture Descriptors
 
 ```
 visualsearch(image, descriptorType, parameters, DESCRIPTOR_SUBFOLDER,distanceMetric, nResults)
 ```
 
-`parameters` must be a 1D array and descriptors with this descriptorType must be computed and saved in `DESCRIPTOR_SUBFOLDER`
+`parameters` must be a 1D array and descriptors with this descriptorType must be computed for your dataset and saved in `DESCRIPTOR_SUBFOLDER`
+
+<b>descriptorTypes<b><br>
+"ColorHistDescriptor"<br>
+"textureDescriptor"
+
 
 Example:
 ```
