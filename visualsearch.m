@@ -1,18 +1,5 @@
 function visualsearch(image, descriptorType, parameters, DESCRIPTOR_SUBFOLDER,distanceMetric, nResults)
 
-%% This function will perform the visual search for a random image or an image from
-%% a particular class if queryClass is mentioned and return precision, recall and
-%% and average_precision metrics
-%% this function loads descriptors pre-computed in the DESCRIPTOR_SUBFOLDER
-%% from the images in the MSRCv2 dataset.
-%% DESCRIPTOR_SUBFOLDER must be inside "descriptors" directory at the top-level project directory
-%% Choose one of the following distance metrics: "cosine", "Euclidean", "Manhattan",
-%% "Mahalanobis" (default Euclidean)
-%% Choose "Mahalanobis" only if the DESCRIPTOR_SUBFOLDER has a projectionMatrix.mat file
-%% which contains Eigen Vectors(.vct) and Eigen Values(.val)
-%% nResults returns the top n results for the query (default 15)
-%% set displayResults as false to not show any results
-
 %%This function performs visual search for a provided image. Make sure that
 %%your descriptors are computed and saved in DESCRIPTOR_SUBFOLDER with the
 %% same parameters you want to use. 
