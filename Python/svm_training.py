@@ -9,17 +9,22 @@ from sklearn.metrics import classification_report
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import plot_confusion_matrix
 
+#Mapping classes to its catgories
 class_dict = {1:'grass', 2: "trees", 3: "building", 4:"aeroplane", 5:"cow",
              6: "face", 7: "car", 8:"bike", 9: "sheep", 10:"flower", 11:"sign",
              12: "bird", 13: "books", 14: "chair", 15: "cat", 16: "dog",
              17:"road", 18: "water", 19: "body", 20: "water with sky"}
 
 def extract_features_labels(features_path):
+    """
+        extract features from in .mat files in the "features_path"
+    """
     files=[os.path.join(features_path, file) for file in os.listdir(features_path)]
     features= np.array([scipy.io.loadmat(file)['F'].flatten() for file in files if file.endswith(".mat")])
     labels = np.array([int(file.split('_')[0]) for file in os.listdir(features_path) if file.endswith(".mat")])
     return features, labels
 
+#plots a confusion matrix
 def plot_conf_matrix(classifier, X_test, y_test, class_labels):
     fig, ax = plt.subplots(figsize=(20, 20))
     titles_options = [("Normalized confusion matrix", 'true')]
@@ -51,7 +56,7 @@ if __name__ == "__main__":
     features_path = args.features_path
     features, labels = extract_features_labels(features_path)
 
-
+    #Setting input arguments
     gamma = args.gamma
     kernel = args.kernel
     test_size = args.test_size

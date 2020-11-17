@@ -7,6 +7,11 @@ import scipy.io
 preprocess = None;
 
 def extract_features(images, model, output_path=None, resize_shape=(224, 224)):
+"""
+    extracts all features from a list of "images"(filenames) using a pre-trained CNN
+    "model". If output_path older is specified, will save the features in that
+    folder
+"""
     image_features = []
     for im in images:
         img = cv.imread(im)

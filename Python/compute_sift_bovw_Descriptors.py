@@ -29,7 +29,7 @@ if __name__ == "__main__":
     for im in images:
         img = cv2.imread(im, 0)
         sift = cv2.SIFT_create()
-        kp, des = sift.detectAndCompute(img,None)
+        kp, des = sift.detectAndCompute(img,None) #computing sift descriptors
         for descriptor in des:
             descriptors.append(descriptor) #can use extend
 
@@ -37,10 +37,10 @@ if __name__ == "__main__":
 
     n_clusters = args.n_clusters;
     scaler = StandardScaler()
-    scaled_features = scaler.fit_transform(descriptors)
+    scaled_features = scaler.fit_transform(descriptors) #normalization
     print(f"Clustering the data into {n_clusters} clusters");
     kmeans = KMeans(n_clusters=n_clusters, random_state=0)
-    model = kmeans.fit(scaled_features)
+    model = kmeans.fit(scaled_features) #clustering the dataset
 
     output_path = args.output_path; #"../descriptors/test/"
 
