@@ -103,7 +103,7 @@ visualsearch(image, descriptorType, parameters, DESCRIPTOR_SUBFOLDER,distanceMet
 
 `parameters` must be a 1D array and descriptors with this descriptorType must be computed for your dataset and saved in `DESCRIPTOR_SUBFOLDER`
 
-<b>descriptorTypes<b><br>
+<b>descriptorTypes</b><br>
 "ColorHistDescriptor"<br>
 "textureDescriptor"
 
